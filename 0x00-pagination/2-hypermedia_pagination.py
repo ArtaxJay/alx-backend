@@ -60,3 +60,25 @@ class Server:
             return csv_file_data[index[0]:index[1]]
         except IndexError:
             return []
+
+
+    def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
+        """
+        Takes two args and rets the req data in dict(key-value, json) format
+        Args:
+            page (int): current pg numb
+            page_size (int): whole pg size
+        Returns:
+            List[List]: key-value pair dict of data
+        """
+        total_pages = len(self.dataset()) // page_size + 1
+        data = self.get_page(page, page_size)
+        popular_baby_names = {
+            "page": page,
+            "page_size": page_size if page_size <= len(data) else len(data),
+            "total_pages": total_pages,
+            "data": data,
+            "prev_page": page - 1 if page > 1 else None,
+            "next_page": page + 1 if page + 1 <= total_pages else None
+        }
+        return popular_baby_names
