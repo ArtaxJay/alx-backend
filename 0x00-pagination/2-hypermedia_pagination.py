@@ -61,7 +61,6 @@ class Server:
         except IndexError:
             return []
 
-
     def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
         """
         Takes two args and rets the req data in dict(key-value, json) format
