@@ -7,10 +7,9 @@ from base_caching import BaseCaching
 
 class LFUCache(BaseCaching):
     """
-    LFUCache is a caching system that follows the LFU
-    (Least Frequently Used) algorithm.
-    If there are ties in frequency,
-    it uses LRU to determine which item to discard.
+    LFUCache is a caching system that follows the LFU (Least Frequently Used)
+    algorithm. If there are ties in frequency, it uses LRU to decide which item
+    to discard.
     """
 
     def __init__(self):
@@ -24,10 +23,8 @@ class LFUCache(BaseCaching):
     def put(self, key, item):
         """
         Add an item to the cache.
-        If the number of items exceeds MAX_ITEMS,
-        discard the least frequently used item (LFU).
-        If there are ties in frequency,
-        discard the least recently used item (LRU).
+        If the number of items exceeds MAX_ITEMS, discard the least frequently
+        used item (LFU). In case of ties, the LRU item is discarded.
         """
         if key is None or item is None:
             return
@@ -49,8 +46,9 @@ class LFUCache(BaseCaching):
             if len(self.cache_data) > BaseCaching.MAX_ITEMS:
                 # Find the least frequently used item(s)
                 min_freq = min(self.frequency.values())
-                least_frequent = [k for k, v in self.frequency.items()
-                                  if v == min_freq]
+                least_frequent = [
+                    k for k, v in self.frequency.items() if v == min_freq
+                ]
 
                 # If there's a tie, use LRU to decide which to discard
                 if len(least_frequent) > 1:
