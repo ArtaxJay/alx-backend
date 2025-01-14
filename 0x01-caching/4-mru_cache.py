@@ -3,7 +3,6 @@
 Module for MRUCache
 """
 from base_caching import BaseCaching
-from collections import OrderedDict
 
 
 class MRUCache(BaseCaching):
@@ -17,8 +16,7 @@ class MRUCache(BaseCaching):
         Initialize the cache.
         """
         super().__init__()
-        # Use OrderedDict to maintain access order
-        self.cache_data = OrderedDict()
+        self.usage_order = []  # Keep track of the usage order
 
     def put(self, key, item):
         """
@@ -30,16 +28,17 @@ class MRUCache(BaseCaching):
             return
 
         if key in self.cache_data:
-            # Remove the key to update its position in the access order
-            self.cache_data.pop(key)
+            # Remove key from usage_order as it will be re-added
+            self.usage_order.remove(key)
 
         self.cache_data[key] = item
+        self.usage_order.append(key)
 
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            # Discard the most recently used item
-            # (last item in OrderedDict)
-            discarded_key, _ = self.cache_data.popitem(last=True)
-            print(f"DISCARD: {discarded_key}")
+            # Discard the most recently used item (last in usage_order)
+            most_recent_key = self.usage_order.pop(-2)
+            del self.cache_data[most_recent_key]
+            print(f"DISCARD: {most_recent_key}")
 
     def get(self, key):
         """
@@ -50,6 +49,6 @@ class MRUCache(BaseCaching):
             return None
 
         # Move the accessed key to the end to mark it as most recently used
-        value = self.cache_data.pop(key)
-        self.cache_data[key] = value
-        return value
+        self.usage_order.remove(key)
+        self.usage_order.append(key)
+        return self.cache_data[key]
