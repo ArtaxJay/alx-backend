@@ -21,6 +21,6 @@
 - How to build a basic Express app interacting with a Redis server
 - How to the build a basic Express app interacting with a Redis server and queue
 
-**_ This project was submitted to ALX by:_**
+_This project was submitted to ALX by:_
 
 # Olaoluwa Oluwajuwon
